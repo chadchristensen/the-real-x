@@ -13,16 +13,27 @@ import { lists } from './schemas/schema';
 // authentication is configured separately here too, but you might move this elsewhere
 // when you write your list-level access control functions, as they typically rely on session data
 import { withAuth, session } from './auth';
+import { Context } from '.keystone/types';
+
+const databaseURL =
+  process.env.DATABASE_URL || 'postgres://localhost:5432/realxapp';
 
 export default withAuth(
   // TODO: Change to PostgresQL
   config({
     db: {
-      // we're using sqlite for the fastest startup experience
-      //   for more information on what database might be appropriate for you
-      //   see https://keystonejs.com/docs/guides/choosing-a-database#title
-      provider: 'sqlite',
-      url: 'file:./keystone.db',
+      provider: 'postgresql',
+      url: databaseURL,
+      onConnect: async (context: Context) => {
+        console.log('Connected to the database');
+        // TODO: Set up seed data
+        // if (process.env.SEED_ME === 'true') await insertSeedData(context);
+      },
+      // Optional advanced configuration
+      enableLogging: true,
+      useMigrations: true,
+      idField: { kind: 'uuid' }, // ? - What should I make this
+      // shadowDatabaseUrl: 'postgres://dbuser:dbpass@localhost:5432/shadowdb'
     },
     lists,
     session,
