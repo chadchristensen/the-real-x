@@ -12,27 +12,77 @@ generator client {
 }
 
 model User {
-  id        String    @id @default(uuid()) @postgresql.Uuid
-  name      String    @default("")
-  email     String    @unique @default("")
-  password  String
-  posts     Post[]    @relation("Post_author")
-  createdAt DateTime? @default(now())
+  id         String      @id @default(uuid()) @postgresql.Uuid
+  name       String      @default("")
+  email      String      @unique @default("")
+  password   String
+  createdAt  DateTime?   @default(now())
+  households Household[] @relation("Household_members")
 }
 
-model Post {
-  id       String  @id @default(uuid()) @postgresql.Uuid
-  title    String  @default("")
-  content  Json    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  author   User?   @relation("Post_author", fields: [authorId], references: [id])
-  authorId String? @map("author") @postgresql.Uuid
-  tags     Tag[]   @relation("Post_tags")
+model Household {
+  id      String @id @default(uuid()) @postgresql.Uuid
+  name    String @default("")
+  members User[] @relation("Household_members")
+}
 
-  @@index([authorId])
+model Ingredient {
+  id                               String             @id @default(uuid()) @postgresql.Uuid
+  name                             String             @default("")
+  from_RecipeIngredient_ingredient RecipeIngredient[] @relation("RecipeIngredient_ingredient")
+}
+
+model Meal {
+  id                      String          @id @default(uuid()) @postgresql.Uuid
+  name                    String          @default("")
+  preparationTime         Int?
+  cookingTime             Int?
+  servings                Int?
+  difficultyLevel         String          @default("MEDIUM")
+  tags                    Tag[]           @relation("Meal_tags")
+  from_ScheduledMeal_meal ScheduledMeal[] @relation("ScheduledMeal_meal")
+}
+
+model Recipe {
+  id           String              @id @default(uuid()) @postgresql.Uuid
+  name         String              @default("")
+  notes        String              @default("")
+  ingredients  RecipeIngredient[]  @relation("Recipe_ingredients")
+  instructions RecipeInstruction[] @relation("Recipe_instructions")
+  tags         Tag[]               @relation("Recipe_tags")
+}
+
+model RecipeIngredient {
+  id                      String      @id @default(uuid()) @postgresql.Uuid
+  ingredient              Ingredient? @relation("RecipeIngredient_ingredient", fields: [ingredientId], references: [id])
+  ingredientId            String?     @map("ingredient") @postgresql.Uuid
+  quantity                Float
+  unitOfMeasurement       String
+  from_Recipe_ingredients Recipe[]    @relation("Recipe_ingredients")
+
+  @@index([ingredientId])
+}
+
+model RecipeInstruction {
+  id                       String   @id @default(uuid()) @postgresql.Uuid
+  description              String   @default("")
+  stepNumber               Int
+  from_Recipe_instructions Recipe[] @relation("Recipe_instructions")
+}
+
+model ScheduledMeal {
+  id     String   @id @default(uuid()) @postgresql.Uuid
+  date   DateTime @postgresql.Date
+  meal   Meal?    @relation("ScheduledMeal_meal", fields: [mealId], references: [id])
+  mealId String?  @map("meal") @postgresql.Uuid
+
+  @@index([mealId])
 }
 
 model Tag {
-  id    String @id @default(uuid()) @postgresql.Uuid
-  name  String @default("")
-  posts Post[] @relation("Post_tags")
+  id               String   @id @default(uuid()) @postgresql.Uuid
+  name             String   @default("")
+  collection       String   @default("FOOD")
+  from_Meal_tags   Meal[]   @relation("Meal_tags")
+  from_Recipe_tags Recipe[] @relation("Recipe_tags")
 }
