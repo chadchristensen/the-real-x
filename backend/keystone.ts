@@ -19,7 +19,6 @@ const databaseURL =
   process.env.DATABASE_URL || 'postgres://localhost:5432/realxapp';
 
 export default withAuth(
-  // TODO: Change to PostgresQL
   config({
     db: {
       provider: 'postgresql',

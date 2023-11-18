@@ -6,9 +6,9 @@ type User {
   name: String
   email: String
   password: PasswordState
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
   createdAt: DateTime
+  households(where: HouseholdWhereInput! = {}, orderBy: [HouseholdOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: HouseholdWhereUniqueInput): [Household!]
+  householdsCount(where: HouseholdWhereInput! = {}): Int
 }
 
 type PasswordState {
@@ -29,8 +29,8 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   email: StringFilter
-  posts: PostManyRelationFilter
   createdAt: DateTimeNullableFilter
+  households: HouseholdManyRelationFilter
 }
 
 input IDFilter {
@@ -78,12 +78,6 @@ input NestedStringFilter {
   not: NestedStringFilter
 }
 
-input PostManyRelationFilter {
-  every: PostWhereInput
-  some: PostWhereInput
-  none: PostWhereInput
-}
-
 input DateTimeNullableFilter {
   equals: DateTime
   in: [DateTime!]
@@ -93,6 +87,12 @@ input DateTimeNullableFilter {
   gt: DateTime
   gte: DateTime
   not: DateTimeNullableFilter
+}
+
+input HouseholdManyRelationFilter {
+  every: HouseholdWhereInput
+  some: HouseholdWhereInput
+  none: HouseholdWhereInput
 }
 
 input UserOrderByInput {
@@ -111,15 +111,15 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
-  posts: PostRelateToManyForUpdateInput
   createdAt: DateTime
+  households: HouseholdRelateToManyForUpdateInput
 }
 
-input PostRelateToManyForUpdateInput {
-  disconnect: [PostWhereUniqueInput!]
-  set: [PostWhereUniqueInput!]
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
+input HouseholdRelateToManyForUpdateInput {
+  disconnect: [HouseholdWhereUniqueInput!]
+  set: [HouseholdWhereUniqueInput!]
+  create: [HouseholdCreateInput!]
+  connect: [HouseholdWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -131,40 +131,145 @@ input UserCreateInput {
   name: String
   email: String
   password: String
-  posts: PostRelateToManyForCreateInput
   createdAt: DateTime
+  households: HouseholdRelateToManyForCreateInput
 }
 
-input PostRelateToManyForCreateInput {
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
+input HouseholdRelateToManyForCreateInput {
+  create: [HouseholdCreateInput!]
+  connect: [HouseholdWhereUniqueInput!]
 }
 
-type Post {
+type Household {
   id: ID!
-  title: String
-  content: Post_content_Document
-  author: User
+  name: String
+  members(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  membersCount(where: UserWhereInput! = {}): Int
+}
+
+input HouseholdWhereUniqueInput {
+  id: ID
+}
+
+input HouseholdWhereInput {
+  AND: [HouseholdWhereInput!]
+  OR: [HouseholdWhereInput!]
+  NOT: [HouseholdWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  members: UserManyRelationFilter
+}
+
+input UserManyRelationFilter {
+  every: UserWhereInput
+  some: UserWhereInput
+  none: UserWhereInput
+}
+
+input HouseholdOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input HouseholdUpdateInput {
+  name: String
+  members: UserRelateToManyForUpdateInput
+}
+
+input UserRelateToManyForUpdateInput {
+  disconnect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input HouseholdUpdateArgs {
+  where: HouseholdWhereUniqueInput!
+  data: HouseholdUpdateInput!
+}
+
+input HouseholdCreateInput {
+  name: String
+  members: UserRelateToManyForCreateInput
+}
+
+input UserRelateToManyForCreateInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+type Ingredient {
+  id: ID!
+  name: String
+}
+
+input IngredientWhereUniqueInput {
+  id: ID
+}
+
+input IngredientWhereInput {
+  AND: [IngredientWhereInput!]
+  OR: [IngredientWhereInput!]
+  NOT: [IngredientWhereInput!]
+  id: IDFilter
+  name: StringFilter
+}
+
+input IngredientOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input IngredientUpdateInput {
+  name: String
+}
+
+input IngredientUpdateArgs {
+  where: IngredientWhereUniqueInput!
+  data: IngredientUpdateInput!
+}
+
+input IngredientCreateInput {
+  name: String
+}
+
+type Meal {
+  id: ID!
+  name: String
+  preparationTime: Int
+  cookingTime: Int
+  servings: Int
+  difficultyLevel: String
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
 }
 
-type Post_content_Document {
-  document(hydrateRelationships: Boolean! = false): JSON!
-}
-
-input PostWhereUniqueInput {
+input MealWhereUniqueInput {
   id: ID
 }
 
-input PostWhereInput {
-  AND: [PostWhereInput!]
-  OR: [PostWhereInput!]
-  NOT: [PostWhereInput!]
+input MealWhereInput {
+  AND: [MealWhereInput!]
+  OR: [MealWhereInput!]
+  NOT: [MealWhereInput!]
   id: IDFilter
-  title: StringFilter
-  author: UserWhereInput
+  name: StringFilter
+  preparationTime: IntNullableFilter
+  cookingTime: IntNullableFilter
+  servings: IntNullableFilter
+  difficultyLevel: StringFilter
   tags: TagManyRelationFilter
+}
+
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
 }
 
 input TagManyRelationFilter {
@@ -173,22 +278,22 @@ input TagManyRelationFilter {
   none: TagWhereInput
 }
 
-input PostOrderByInput {
+input MealOrderByInput {
   id: OrderDirection
-  title: OrderDirection
+  name: OrderDirection
+  preparationTime: OrderDirection
+  cookingTime: OrderDirection
+  servings: OrderDirection
+  difficultyLevel: OrderDirection
 }
 
-input PostUpdateInput {
-  title: String
-  content: JSON
-  author: UserRelateToOneForUpdateInput
+input MealUpdateInput {
+  name: String
+  preparationTime: Int
+  cookingTime: Int
+  servings: Int
+  difficultyLevel: String
   tags: TagRelateToManyForUpdateInput
-}
-
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
 }
 
 input TagRelateToManyForUpdateInput {
@@ -198,21 +303,18 @@ input TagRelateToManyForUpdateInput {
   connect: [TagWhereUniqueInput!]
 }
 
-input PostUpdateArgs {
-  where: PostWhereUniqueInput!
-  data: PostUpdateInput!
+input MealUpdateArgs {
+  where: MealWhereUniqueInput!
+  data: MealUpdateInput!
 }
 
-input PostCreateInput {
-  title: String
-  content: JSON
-  author: UserRelateToOneForCreateInput
+input MealCreateInput {
+  name: String
+  preparationTime: Int
+  cookingTime: Int
+  servings: Int
+  difficultyLevel: String
   tags: TagRelateToManyForCreateInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 input TagRelateToManyForCreateInput {
@@ -220,11 +322,281 @@ input TagRelateToManyForCreateInput {
   connect: [TagWhereUniqueInput!]
 }
 
+type Recipe {
+  id: ID!
+  name: String
+  notes: String
+  ingredients(where: RecipeIngredientWhereInput! = {}, orderBy: [RecipeIngredientOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RecipeIngredientWhereUniqueInput): [RecipeIngredient!]
+  ingredientsCount(where: RecipeIngredientWhereInput! = {}): Int
+  instructions(where: RecipeInstructionWhereInput! = {}, orderBy: [RecipeInstructionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RecipeInstructionWhereUniqueInput): [RecipeInstruction!]
+  instructionsCount(where: RecipeInstructionWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+}
+
+input RecipeWhereUniqueInput {
+  id: ID
+}
+
+input RecipeWhereInput {
+  AND: [RecipeWhereInput!]
+  OR: [RecipeWhereInput!]
+  NOT: [RecipeWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  notes: StringFilter
+  ingredients: RecipeIngredientManyRelationFilter
+  instructions: RecipeInstructionManyRelationFilter
+  tags: TagManyRelationFilter
+}
+
+input RecipeIngredientManyRelationFilter {
+  every: RecipeIngredientWhereInput
+  some: RecipeIngredientWhereInput
+  none: RecipeIngredientWhereInput
+}
+
+input RecipeInstructionManyRelationFilter {
+  every: RecipeInstructionWhereInput
+  some: RecipeInstructionWhereInput
+  none: RecipeInstructionWhereInput
+}
+
+input RecipeOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  notes: OrderDirection
+}
+
+input RecipeUpdateInput {
+  name: String
+  notes: String
+  ingredients: RecipeIngredientRelateToManyForUpdateInput
+  instructions: RecipeInstructionRelateToManyForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+}
+
+input RecipeIngredientRelateToManyForUpdateInput {
+  disconnect: [RecipeIngredientWhereUniqueInput!]
+  set: [RecipeIngredientWhereUniqueInput!]
+  create: [RecipeIngredientCreateInput!]
+  connect: [RecipeIngredientWhereUniqueInput!]
+}
+
+input RecipeInstructionRelateToManyForUpdateInput {
+  disconnect: [RecipeInstructionWhereUniqueInput!]
+  set: [RecipeInstructionWhereUniqueInput!]
+  create: [RecipeInstructionCreateInput!]
+  connect: [RecipeInstructionWhereUniqueInput!]
+}
+
+input RecipeUpdateArgs {
+  where: RecipeWhereUniqueInput!
+  data: RecipeUpdateInput!
+}
+
+input RecipeCreateInput {
+  name: String
+  notes: String
+  ingredients: RecipeIngredientRelateToManyForCreateInput
+  instructions: RecipeInstructionRelateToManyForCreateInput
+  tags: TagRelateToManyForCreateInput
+}
+
+input RecipeIngredientRelateToManyForCreateInput {
+  create: [RecipeIngredientCreateInput!]
+  connect: [RecipeIngredientWhereUniqueInput!]
+}
+
+input RecipeInstructionRelateToManyForCreateInput {
+  create: [RecipeInstructionCreateInput!]
+  connect: [RecipeInstructionWhereUniqueInput!]
+}
+
+type RecipeIngredient {
+  id: ID!
+  ingredient: Ingredient
+  quantity: Float
+  unitOfMeasurement: String
+}
+
+input RecipeIngredientWhereUniqueInput {
+  id: ID
+}
+
+input RecipeIngredientWhereInput {
+  AND: [RecipeIngredientWhereInput!]
+  OR: [RecipeIngredientWhereInput!]
+  NOT: [RecipeIngredientWhereInput!]
+  id: IDFilter
+  ingredient: IngredientWhereInput
+  quantity: FloatFilter
+  unitOfMeasurement: StringFilter
+}
+
+input FloatFilter {
+  equals: Float
+  in: [Float!]
+  notIn: [Float!]
+  lt: Float
+  lte: Float
+  gt: Float
+  gte: Float
+  not: FloatFilter
+}
+
+input RecipeIngredientOrderByInput {
+  id: OrderDirection
+  quantity: OrderDirection
+  unitOfMeasurement: OrderDirection
+}
+
+input RecipeIngredientUpdateInput {
+  ingredient: IngredientRelateToOneForUpdateInput
+  quantity: Float
+  unitOfMeasurement: String
+}
+
+input IngredientRelateToOneForUpdateInput {
+  create: IngredientCreateInput
+  connect: IngredientWhereUniqueInput
+  disconnect: Boolean
+}
+
+input RecipeIngredientUpdateArgs {
+  where: RecipeIngredientWhereUniqueInput!
+  data: RecipeIngredientUpdateInput!
+}
+
+input RecipeIngredientCreateInput {
+  ingredient: IngredientRelateToOneForCreateInput
+  quantity: Float
+  unitOfMeasurement: String
+}
+
+input IngredientRelateToOneForCreateInput {
+  create: IngredientCreateInput
+  connect: IngredientWhereUniqueInput
+}
+
+type RecipeInstruction {
+  id: ID!
+  description: String
+  stepNumber: Int
+}
+
+input RecipeInstructionWhereUniqueInput {
+  id: ID
+}
+
+input RecipeInstructionWhereInput {
+  AND: [RecipeInstructionWhereInput!]
+  OR: [RecipeInstructionWhereInput!]
+  NOT: [RecipeInstructionWhereInput!]
+  id: IDFilter
+  description: StringFilter
+  stepNumber: IntFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input RecipeInstructionOrderByInput {
+  id: OrderDirection
+  description: OrderDirection
+  stepNumber: OrderDirection
+}
+
+input RecipeInstructionUpdateInput {
+  description: String
+  stepNumber: Int
+}
+
+input RecipeInstructionUpdateArgs {
+  where: RecipeInstructionWhereUniqueInput!
+  data: RecipeInstructionUpdateInput!
+}
+
+input RecipeInstructionCreateInput {
+  description: String
+  stepNumber: Int
+}
+
+type ScheduledMeal {
+  id: ID!
+  date: CalendarDay
+  meal: Meal
+}
+
+scalar CalendarDay @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
+
+input ScheduledMealWhereUniqueInput {
+  id: ID
+}
+
+input ScheduledMealWhereInput {
+  AND: [ScheduledMealWhereInput!]
+  OR: [ScheduledMealWhereInput!]
+  NOT: [ScheduledMealWhereInput!]
+  id: IDFilter
+  date: CalendarDayFilter
+  meal: MealWhereInput
+}
+
+input CalendarDayFilter {
+  equals: CalendarDay
+  in: [CalendarDay!]
+  notIn: [CalendarDay!]
+  lt: CalendarDay
+  lte: CalendarDay
+  gt: CalendarDay
+  gte: CalendarDay
+  not: CalendarDayFilter
+}
+
+input ScheduledMealOrderByInput {
+  id: OrderDirection
+  date: OrderDirection
+}
+
+input ScheduledMealUpdateInput {
+  date: CalendarDay
+  meal: MealRelateToOneForUpdateInput
+}
+
+input MealRelateToOneForUpdateInput {
+  create: MealCreateInput
+  connect: MealWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ScheduledMealUpdateArgs {
+  where: ScheduledMealWhereUniqueInput!
+  data: ScheduledMealUpdateInput!
+}
+
+input ScheduledMealCreateInput {
+  date: CalendarDay
+  meal: MealRelateToOneForCreateInput
+}
+
+input MealRelateToOneForCreateInput {
+  create: MealCreateInput
+  connect: MealWhereUniqueInput
+}
+
 type Tag {
   id: ID!
   name: String
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
+  collection: String
 }
 
 input TagWhereUniqueInput {
@@ -237,17 +609,18 @@ input TagWhereInput {
   NOT: [TagWhereInput!]
   id: IDFilter
   name: StringFilter
-  posts: PostManyRelationFilter
+  collection: StringFilter
 }
 
 input TagOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  collection: OrderDirection
 }
 
 input TagUpdateInput {
   name: String
-  posts: PostRelateToManyForUpdateInput
+  collection: String
 }
 
 input TagUpdateArgs {
@@ -257,7 +630,7 @@ input TagUpdateArgs {
 
 input TagCreateInput {
   name: String
-  posts: PostRelateToManyForCreateInput
+  collection: String
 }
 
 """
@@ -272,12 +645,48 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
-  createPost(data: PostCreateInput!): Post
-  createPosts(data: [PostCreateInput!]!): [Post]
-  updatePost(where: PostWhereUniqueInput!, data: PostUpdateInput!): Post
-  updatePosts(data: [PostUpdateArgs!]!): [Post]
-  deletePost(where: PostWhereUniqueInput!): Post
-  deletePosts(where: [PostWhereUniqueInput!]!): [Post]
+  createHousehold(data: HouseholdCreateInput!): Household
+  createHouseholds(data: [HouseholdCreateInput!]!): [Household]
+  updateHousehold(where: HouseholdWhereUniqueInput!, data: HouseholdUpdateInput!): Household
+  updateHouseholds(data: [HouseholdUpdateArgs!]!): [Household]
+  deleteHousehold(where: HouseholdWhereUniqueInput!): Household
+  deleteHouseholds(where: [HouseholdWhereUniqueInput!]!): [Household]
+  createIngredient(data: IngredientCreateInput!): Ingredient
+  createIngredients(data: [IngredientCreateInput!]!): [Ingredient]
+  updateIngredient(where: IngredientWhereUniqueInput!, data: IngredientUpdateInput!): Ingredient
+  updateIngredients(data: [IngredientUpdateArgs!]!): [Ingredient]
+  deleteIngredient(where: IngredientWhereUniqueInput!): Ingredient
+  deleteIngredients(where: [IngredientWhereUniqueInput!]!): [Ingredient]
+  createMeal(data: MealCreateInput!): Meal
+  createMeals(data: [MealCreateInput!]!): [Meal]
+  updateMeal(where: MealWhereUniqueInput!, data: MealUpdateInput!): Meal
+  updateMeals(data: [MealUpdateArgs!]!): [Meal]
+  deleteMeal(where: MealWhereUniqueInput!): Meal
+  deleteMeals(where: [MealWhereUniqueInput!]!): [Meal]
+  createRecipe(data: RecipeCreateInput!): Recipe
+  createRecipes(data: [RecipeCreateInput!]!): [Recipe]
+  updateRecipe(where: RecipeWhereUniqueInput!, data: RecipeUpdateInput!): Recipe
+  updateRecipes(data: [RecipeUpdateArgs!]!): [Recipe]
+  deleteRecipe(where: RecipeWhereUniqueInput!): Recipe
+  deleteRecipes(where: [RecipeWhereUniqueInput!]!): [Recipe]
+  createRecipeIngredient(data: RecipeIngredientCreateInput!): RecipeIngredient
+  createRecipeIngredients(data: [RecipeIngredientCreateInput!]!): [RecipeIngredient]
+  updateRecipeIngredient(where: RecipeIngredientWhereUniqueInput!, data: RecipeIngredientUpdateInput!): RecipeIngredient
+  updateRecipeIngredients(data: [RecipeIngredientUpdateArgs!]!): [RecipeIngredient]
+  deleteRecipeIngredient(where: RecipeIngredientWhereUniqueInput!): RecipeIngredient
+  deleteRecipeIngredients(where: [RecipeIngredientWhereUniqueInput!]!): [RecipeIngredient]
+  createRecipeInstruction(data: RecipeInstructionCreateInput!): RecipeInstruction
+  createRecipeInstructions(data: [RecipeInstructionCreateInput!]!): [RecipeInstruction]
+  updateRecipeInstruction(where: RecipeInstructionWhereUniqueInput!, data: RecipeInstructionUpdateInput!): RecipeInstruction
+  updateRecipeInstructions(data: [RecipeInstructionUpdateArgs!]!): [RecipeInstruction]
+  deleteRecipeInstruction(where: RecipeInstructionWhereUniqueInput!): RecipeInstruction
+  deleteRecipeInstructions(where: [RecipeInstructionWhereUniqueInput!]!): [RecipeInstruction]
+  createScheduledMeal(data: ScheduledMealCreateInput!): ScheduledMeal
+  createScheduledMeals(data: [ScheduledMealCreateInput!]!): [ScheduledMeal]
+  updateScheduledMeal(where: ScheduledMealWhereUniqueInput!, data: ScheduledMealUpdateInput!): ScheduledMeal
+  updateScheduledMeals(data: [ScheduledMealUpdateArgs!]!): [ScheduledMeal]
+  deleteScheduledMeal(where: ScheduledMealWhereUniqueInput!): ScheduledMeal
+  deleteScheduledMeals(where: [ScheduledMealWhereUniqueInput!]!): [ScheduledMeal]
   createTag(data: TagCreateInput!): Tag
   createTags(data: [TagCreateInput!]!): [Tag]
   updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
@@ -310,9 +719,27 @@ type Query {
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  post(where: PostWhereUniqueInput!): Post
-  postsCount(where: PostWhereInput! = {}): Int
+  households(where: HouseholdWhereInput! = {}, orderBy: [HouseholdOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: HouseholdWhereUniqueInput): [Household!]
+  household(where: HouseholdWhereUniqueInput!): Household
+  householdsCount(where: HouseholdWhereInput! = {}): Int
+  ingredients(where: IngredientWhereInput! = {}, orderBy: [IngredientOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: IngredientWhereUniqueInput): [Ingredient!]
+  ingredient(where: IngredientWhereUniqueInput!): Ingredient
+  ingredientsCount(where: IngredientWhereInput! = {}): Int
+  meals(where: MealWhereInput! = {}, orderBy: [MealOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MealWhereUniqueInput): [Meal!]
+  meal(where: MealWhereUniqueInput!): Meal
+  mealsCount(where: MealWhereInput! = {}): Int
+  recipes(where: RecipeWhereInput! = {}, orderBy: [RecipeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RecipeWhereUniqueInput): [Recipe!]
+  recipe(where: RecipeWhereUniqueInput!): Recipe
+  recipesCount(where: RecipeWhereInput! = {}): Int
+  recipeIngredients(where: RecipeIngredientWhereInput! = {}, orderBy: [RecipeIngredientOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RecipeIngredientWhereUniqueInput): [RecipeIngredient!]
+  recipeIngredient(where: RecipeIngredientWhereUniqueInput!): RecipeIngredient
+  recipeIngredientsCount(where: RecipeIngredientWhereInput! = {}): Int
+  recipeInstructions(where: RecipeInstructionWhereInput! = {}, orderBy: [RecipeInstructionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RecipeInstructionWhereUniqueInput): [RecipeInstruction!]
+  recipeInstruction(where: RecipeInstructionWhereUniqueInput!): RecipeInstruction
+  recipeInstructionsCount(where: RecipeInstructionWhereInput! = {}): Int
+  scheduledMeals(where: ScheduledMealWhereInput! = {}, orderBy: [ScheduledMealOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ScheduledMealWhereUniqueInput): [ScheduledMeal!]
+  scheduledMeal(where: ScheduledMealWhereUniqueInput!): ScheduledMeal
+  scheduledMealsCount(where: ScheduledMealWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tag(where: TagWhereUniqueInput!): Tag
   tagsCount(where: TagWhereInput! = {}): Int
