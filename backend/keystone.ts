@@ -16,7 +16,9 @@ import { withAuth, session } from './auth';
 import { Context } from '.keystone/types';
 
 const databaseURL =
-  process.env.DATABASE_URL || 'postgres://localhost:5432/realxapp';
+  process.env.DATABASE_URL;
+
+if (!databaseURL) throw Error('Need to set environment variable DATABASE_URL')
 
 export default withAuth(
   config({
