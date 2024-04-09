@@ -9,5 +9,8 @@ export const Ingredient: Lists.Ingredient = list({
         name: text({
             validation: { isRequired: true }
         }),
+        category: text({
+            validation: { isRequired: true }
+        })
     }
 });

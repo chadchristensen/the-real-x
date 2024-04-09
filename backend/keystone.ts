@@ -14,6 +14,7 @@ import { lists } from './schemas/schema';
 // when you write your list-level access control functions, as they typically rely on session data
 import { withAuth, session } from './auth';
 import { Context } from '.keystone/types';
+import { insertSeedData } from './lib/seed-data';
 
 const databaseURL =
   process.env.DATABASE_URL;
@@ -28,7 +29,7 @@ export default withAuth(
       onConnect: async (context: Context) => {
         console.log('Connected to the database');
         // TODO: Set up seed data
-        // if (process.env.SEED_ME === 'true') await insertSeedData(context);
+        if (process.env.SEED_ME === 'true') await insertSeedData(context);
       },
       // Optional advanced configuration
       enableLogging: true,

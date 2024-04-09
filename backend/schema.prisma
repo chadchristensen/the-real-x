@@ -29,6 +29,7 @@ model Household {
 model Ingredient {
   id                               String             @id @default(uuid()) @postgresql.Uuid
   name                             String             @default("")
+  category                         String             @default("")
   from_RecipeIngredient_ingredient RecipeIngredient[] @relation("RecipeIngredient_ingredient")
 }
 
