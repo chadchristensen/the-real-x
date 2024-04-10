@@ -1,27 +1,13 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "User" (
+    "id" UUID NOT NULL,
+    "name" TEXT NOT NULL DEFAULT '',
+    "email" TEXT NOT NULL DEFAULT '',
+    "password" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
 
-  - You are about to drop the `Post` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `_Post_tags` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "Post" DROP CONSTRAINT "Post_author_fkey";
-
--- DropForeignKey
-ALTER TABLE "_Post_tags" DROP CONSTRAINT "_Post_tags_A_fkey";
-
--- DropForeignKey
-ALTER TABLE "_Post_tags" DROP CONSTRAINT "_Post_tags_B_fkey";
-
--- AlterTable
-ALTER TABLE "Tag" ADD COLUMN     "collection" TEXT NOT NULL DEFAULT 'FOOD';
-
--- DropTable
-DROP TABLE "Post";
-
--- DropTable
-DROP TABLE "_Post_tags";
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Household" (
@@ -35,6 +21,7 @@ CREATE TABLE "Household" (
 CREATE TABLE "Ingredient" (
     "id" UUID NOT NULL,
     "name" TEXT NOT NULL DEFAULT '',
+    "category" TEXT NOT NULL DEFAULT '',
 
     CONSTRAINT "Ingredient_pkey" PRIMARY KEY ("id")
 );
@@ -89,6 +76,15 @@ CREATE TABLE "ScheduledMeal" (
 );
 
 -- CreateTable
+CREATE TABLE "Tag" (
+    "id" UUID NOT NULL,
+    "name" TEXT NOT NULL DEFAULT '',
+    "collection" TEXT NOT NULL DEFAULT 'FOOD',
+
+    CONSTRAINT "Tag_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_Household_members" (
     "A" UUID NOT NULL,
     "B" UUID NOT NULL
@@ -117,6 +113,9 @@ CREATE TABLE "_Recipe_tags" (
     "A" UUID NOT NULL,
     "B" UUID NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE INDEX "RecipeIngredient_ingredient_idx" ON "RecipeIngredient"("ingredient");

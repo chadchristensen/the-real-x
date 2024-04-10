@@ -201,6 +201,7 @@ input UserRelateToManyForCreateInput {
 type Ingredient {
   id: ID!
   name: String
+  category: String
 }
 
 input IngredientWhereUniqueInput {
@@ -213,15 +214,18 @@ input IngredientWhereInput {
   NOT: [IngredientWhereInput!]
   id: IDFilter
   name: StringFilter
+  category: StringFilter
 }
 
 input IngredientOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  category: OrderDirection
 }
 
 input IngredientUpdateInput {
   name: String
+  category: String
 }
 
 input IngredientUpdateArgs {
@@ -231,6 +235,7 @@ input IngredientUpdateArgs {
 
 input IngredientCreateInput {
   name: String
+  category: String
 }
 
 type Meal {
