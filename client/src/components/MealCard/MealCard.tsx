@@ -15,12 +15,12 @@ const mealCardVariants = cva("", {
     }
 })
 
-type Props = {
+type MealCardProps = {
     mealTitle: string,
     mealType?: 'default' | 'breakfast' | 'lunch' | 'dinner' | 'snack',
 }
 
-export default function MealCard({ mealTitle, mealType = "default" }: Props) {
+export default function MealCard({ mealTitle, mealType = "default" }: MealCardProps) {
     return (
         <Card className={cn(mealCardVariants({ variant: mealType }), "w-full max-w-sm border-t-8")}>
             <CardHeader>
