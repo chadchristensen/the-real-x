@@ -3,11 +3,11 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type { Config } from 'jest';
-import nextJest from 'next/jest';
+import type { Config } from "jest";
+import nextJest from "next/jest";
 
 const createJestConfig = nextJest({
-  dir: './',
+  dir: "./",
 });
 
 const config: Config = {
@@ -18,6 +18,7 @@ const config: Config = {
   // bail: 0,
 
   // The directory where Jest should store its cached dependency information
+  // eslint-disable-next-line no-secrets/no-secrets
   // cacheDirectory: "/private/var/folders/gl/_ptzzvgd5jq__8gyzc7hsx7m0000gn/T/jest_dx",
 
   // Automatically clear mock calls, instances, contexts and results before every test
