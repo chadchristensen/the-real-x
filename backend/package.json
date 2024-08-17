@@ -1,18 +1,11 @@
 {
-  "name": "keystone-app",
+  "name": "real-x-backend",
   "version": "1.0.2",
   "private": true,
   "scripts": {
-    "dev": "keystone dev",
-    "start": "keystone start",
-    "build": "keystone build",
-    "postinstall": "keystone build --no-ui --frozen",
     "pre-commit": "lint-staged"
   },
   "dependencies": {
-    "@keystone-6/auth": "^7.0.0",
-    "@keystone-6/core": "^5.0.0",
-    "@keystone-6/fields-document": "^7.0.0",
     "dotenv": "^16.3.1",
     "typescript": "^4.9.5"
   },
