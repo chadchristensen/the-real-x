@@ -3,6 +3,7 @@ node_modules
 keystone.db
 *.log
 .env
+dist
 
 # Secrets
 *.secret.txt
