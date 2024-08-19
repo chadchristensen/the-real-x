@@ -1,4 +1,4 @@
-type Ingredient = {
-    name: string;
-    category: string;
-}
+export type Ingredient = {
+  name: string;
+  category: string;
+};

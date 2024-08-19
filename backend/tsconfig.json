@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "strict": true,
     "noEmit": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
+    "target": "esnext", // Compile to a modern ECMAScript version that supports ES modules
+    "module": "esnext", // Use ES module syntax for module code generation
+    "moduleResolution": "node", // Use Node.js style module resolution
+    "esModuleInterop": true, // Enables default imports from modules with no default export
+    "outDir": "./dist" // Output directory for compiled files
   }
 }
