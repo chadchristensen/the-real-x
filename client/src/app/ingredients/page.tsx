@@ -31,13 +31,13 @@ export default async function IngredientsListPage() {
   }
 
   return (
-    <>
-      <h1>Ingredients</h1>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-4">Ingredients</h1>
       <ul>
         {data?.ingredients?.map((ingredient: Ingredient) => (
           <li key={ingredient.id}>{ingredient.name}</li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }
